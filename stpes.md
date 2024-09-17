@@ -1,0 +1,12 @@
+- Initialize Project npm init
+- install express, nodemon
+- create server
+- listen on port 7777
+- initialize git ( git init )
+- create .gitignore
+- git add .
+- git commit -m "initial commit"
+- create repo on github.com/new
+- git remote add origin git@github.com:sakshukh/devTinder.git
+- git branch -M main
+- git push -u origin main
