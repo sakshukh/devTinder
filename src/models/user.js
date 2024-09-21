@@ -22,7 +22,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
       immutable: true,
-      unique: true,
+      unique: true, // unique creates a automatic index
       trim: true,
       lowercase: true,
       validate(value) {
@@ -43,6 +43,11 @@ const userSchema = new Schema(
     age: {
       type: Number,
       min: 18,
+    },
+    about: {
+      type: String,
+      maxLength: 500,
+      default: "This is a default about",
     },
     gender: {
       type: String,
@@ -70,12 +75,29 @@ const userSchema = new Schema(
         }
       },
     },
+    intresetedIn: {
+      type: [String],
+      validate(value) {
+        if (value.length > 15) {
+          throw new Error("Skills are invalid");
+        }
+      },
+    },
+    hobbies: {
+      type: [String],
+      validate(value) {
+        if (value.length > 5) {
+          throw new Error("Skills are invalid");
+        }
+      },
+    },
   },
   {
     timestamps: true,
   }
 );
 
+// DON'T use arrow functions here.. as this keyword is required inside the function
 userSchema.methods.getJwt = async function () {
   const token = await jwt.sign({ _id: this._id }, "Dev@Tinder43!", {
     expiresIn: "7d",
@@ -90,6 +112,9 @@ userSchema.methods.validatePassword = async function (passwordInputByUser) {
   );
   return isPasswordValid;
 };
+
+// compound index
+userSchema.index({ firstName: 1, lastName: 2 });
 
 const User = mongoose.model("User", userSchema);
 

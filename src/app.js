@@ -1,11 +1,9 @@
 const express = require("express");
 const { connectDB } = require("./config/database");
-const User = require("./models/user");
-const { validateSignUpData } = require("./utils/validate");
-const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
-const jwt = require("jsonwebtoken");
-const { userAuth } = require("./middlewares/auth");
+const authRouter = require("./routes/auth");
+const profileRoute = require("./routes/profile");
+const requestRoute = require("./routes/request");
 
 const app = express();
 
@@ -13,82 +11,9 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-// create a new instance of the User model
-app.post("/signup", async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    emailId,
-    password,
-    gender,
-    age,
-    profileUrl,
-    skills,
-  } = req.body;
-  try {
-    // validate the user data
-    validateSignUpData(req);
-
-    // encrypt password
-    const passwordHash = await bcrypt.hash(password, 10);
-    console.log(passwordHash);
-
-    const user = new User({
-      firstName,
-      lastName,
-      emailId,
-      password: passwordHash,
-      gender,
-      age,
-      profileUrl,
-      skills,
-    });
-
-    await user.save();
-    res.send("User created successfully");
-  } catch (err) {
-    res.status(400).send("Error saving user: " + err.message);
-  }
-});
-
-// login API
-app.post("/login", async (req, res) => {
-  const { emailId, password } = req.body;
-  try {
-    const user = await User.findOne({ emailId: emailId });
-    if (!user) {
-      res.send("Invalid credentials");
-    }
-    const isPasswordValid = await user.validatePassword(password);
-    if (isPasswordValid) {
-      const token = await user.getJwt();
-      // add the token and send back the cookie with token to the user
-      res.cookie("token", token);
-      res.send("Logged in successfully");
-    } else {
-      res.send("Invalid credentials");
-    }
-  } catch (err) {
-    res.status(400).send("something went wrong" + err.message);
-  }
-});
-
-app.get("/profile", userAuth, async (req, res) => {
-  try {
-    res.send(req.user);
-  } catch (err) {
-    res.status(400).send("something went wrong" + err.message);
-  }
-});
-
-app.post("/sendConnectionRequest", userAuth, async (req, res) => {
-  try {
-    const { user } = req;
-    res.send(user.firstName + " has sent a connection request!!");
-  } catch (err) {
-    res.status(400).send("Something went wrong!! " + err.message);
-  }
-});
+app.use("/", authRouter);
+app.use("/profile", profileRoute);
+app.use("/request", requestRoute);
 
 // get the users profile from the database
 app.get("/user", async (req, res) => {

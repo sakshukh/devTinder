@@ -26,7 +26,42 @@ const validateLoginData = function (req) {
   }
 };
 
+const validateProfileEditData = function (req) {
+  const allowedEditFields = ["profileUrl", "age", "gender", "about", "skills"];
+  const isEditAllowed = Object.keys(req.body).every((field) =>
+    allowedEditFields.includes(field)
+  );
+  return isEditAllowed;
+};
+
+const validatePasswordChangeData = function (req) {
+  const allowedFields = ["currentPassword", "newPassword"];
+  const isAllowedFielld = Object.keys(req.body).every((field) =>
+    allowedFields.includes(field)
+  );
+  if (!isAllowedFielld) {
+    throw new Error("Please provide the correct feilds");
+  }
+  if (!validator.isStrongPassword(req.body.newPassword)) {
+    throw new Error("Please provide the correct format of new password");
+  }
+  return;
+};
+
+const validateSendRequest = function (req, status, toUserId) {
+  const allowedStatus = ["interested", "ignore"];
+  if (!allowedStatus.includes(status)) {
+    throw new Error("Invalid status");
+  }
+};
+
+const validateUsernameAndPassword = function (req) {};
+
 module.exports = {
   validateSignUpData,
   validateLoginData,
+  validateProfileEditData,
+  validateUsernameAndPassword,
+  validatePasswordChangeData,
+  validateSendRequest,
 };

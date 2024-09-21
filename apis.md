@@ -1,18 +1,31 @@
 # DevTinder APIs
 
+### authRouter
+
 - POST /signup
 - POST /login
 - POST /logout
 
-- GET /profile
-- PATCH /prfile
-- DELETE /profile
+### profileRouter
 
-- POST /connection/request/ignored/:userId
-- POST /connection/request/accepted/:userId
-- POST /connection/review/sent/:requestId
+- GET /profile/view
+- PATCH /prfile/edit
+- PATCH /profile/forget => forget password
+- DELETE /profile/delete
+- PATCH /profile/change/password => change password
 
-- GET user/feed
+### connectionRequestRouter
+
+- POST /request/send/ignored/:userId
+- POST /request/send/accepted/:userId
+- POST /request/receive/accepted/:requestId
+- POST /request/receive/rejected/:requestId
+
+### userRouter
+
+- GET /user/feed
+- GET /user/requests
+- GET /user/connections
 
 - post/notification
 - post/onlinestatuschange
