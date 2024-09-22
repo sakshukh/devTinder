@@ -13,7 +13,7 @@ router.get("/view", userAuth, async (req, res) => {
   try {
     res.json({ message: "success", data: req.user });
   } catch (err) {
-    res.status(400).send("something went wrong" + err.message);
+    res.status(400).send("ERROR: " + err.message);
   }
 });
 
@@ -29,7 +29,7 @@ router.patch("/edit", userAuth, async (req, res) => {
     loggedInUser.save();
     res.json({ message: "success", data: loggedInUser });
   } catch (err) {
-    res.status(400).send("something went wrong " + err.message);
+    res.status(400).send("ERROR: " + err.message);
   }
 });
 
@@ -45,7 +45,6 @@ router.patch("/change/password", userAuth, async (req, res) => {
     }
 
     const passwordHash = await bcrypt.hash(newPassword, 10);
-    console.log(passwordHash);
     user.password = passwordHash;
     user.save();
 

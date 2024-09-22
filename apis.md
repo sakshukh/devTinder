@@ -22,7 +22,7 @@
 ### userRouter
 
 - GET /user/feed
-- GET /user/requests
+- GET /user/requests/received
 - GET /user/connections
 
 - post/notification

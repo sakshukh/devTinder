@@ -8,18 +8,18 @@ const router = express.Router();
 
 // create a new instance of the User model
 router.post("/signup", async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    emailId,
-    password,
-    gender,
-    age,
-    profileUrl,
-    skills,
-    about,
-  } = req.body;
   try {
+    const {
+      firstName,
+      lastName,
+      emailId,
+      password,
+      gender,
+      age,
+      profileUrl,
+      skills,
+      about,
+    } = req.body;
     // validate the user data
     validateSignUpData(req);
 
@@ -41,29 +41,29 @@ router.post("/signup", async (req, res) => {
     await user.save();
     res.send("User created successfully");
   } catch (err) {
-    res.status(400).send("Error saving user: " + err.message);
+    res.status(400).send("ERROR: " + err.message);
   }
 });
 
 // login API
 router.post("/login", async (req, res) => {
-  const { emailId, password } = req.body;
   try {
+    const { emailId, password } = req.body;
     const user = await User.findOne({ emailId: emailId });
     if (!user) {
-      res.send("Invalid credentials");
+      return res.send("Invalid credentials");
     }
     const isPasswordValid = await user.validatePassword(password);
     if (isPasswordValid) {
       const token = await user.getJwt();
       // add the token and send back the cookie with token to the user
       res.cookie("token", token);
-      res.send("Logged in successfully");
+      return res.send("Logged in successfully 😊");
     } else {
-      res.send("Invalid credentials");
+      return res.send("Invalid credentials");
     }
   } catch (err) {
-    res.status(400).send("something went wrong" + err.message);
+    res.status(400).send("ERROR: " + err.message);
   }
 });
 

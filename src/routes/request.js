@@ -41,9 +41,14 @@ router.post("/send/:status/:toUserId", userAuth, async (req, res) => {
 
     await newConnectionRequest.save();
 
+    const message =
+      status === "interested"
+        ? `${req.user.firstName} is ${status} in ${doesToUserExist.firstName}`
+        : `${req.user.firstName} has ${status} ${doesToUserExist.firstName}`;
+
     res.json({
-      message: "Connection request sent successfully",
-      newConnectionRequest,
+      message,
+      data: newConnectionRequest,
     });
   } catch (err) {
     res.status(400).send("ERROR:  " + err.message);

@@ -27,7 +27,14 @@ const validateLoginData = function (req) {
 };
 
 const validateProfileEditData = function (req) {
-  const allowedEditFields = ["profileUrl", "age", "gender", "about", "skills"];
+  const allowedEditFields = [
+    "profileUrl",
+    "age",
+    "gender",
+    "about",
+    "skills",
+    "hobbies",
+  ];
   const isEditAllowed = Object.keys(req.body).every((field) =>
     allowedEditFields.includes(field)
   );
@@ -48,8 +55,8 @@ const validatePasswordChangeData = function (req) {
   return;
 };
 
-const validateSendRequest = function (req, status, toUserId) {
-  const allowedStatus = ["interested", "ignore"];
+const validateSendRequest = function (req, status) {
+  const allowedStatus = ["interested", "ignored"];
   if (!allowedStatus.includes(status)) {
     throw new Error("Invalid status");
   }
