@@ -70,8 +70,6 @@ router.get("/feed", userAuth, async (req, res) => {
     const skip = (page - 1) * limit;
 
     limit = limit > 50 ? 50 : limit;
-
-    console.log(page, limit);
     loggedInUser = req.user;
 
     // find connection request (send+received)

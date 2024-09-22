@@ -70,7 +70,7 @@ const userSchema = new Schema(
     skills: {
       type: [String],
       validate(value) {
-        if (value.length > 15) {
+        if (value.length > 20) {
           throw new Error("Skills are invalid");
         }
       },
@@ -86,7 +86,7 @@ const userSchema = new Schema(
     hobbies: {
       type: [String],
       validate(value) {
-        if (value.length > 5) {
+        if (value.length > 20) {
           throw new Error("Skills are invalid");
         }
       },

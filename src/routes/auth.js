@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
       const token = await user.getJwt();
       // add the token and send back the cookie with token to the user
       res.cookie("token", token);
-      return res.send("Logged in successfully 😊");
+      return res.send(user.firstName + " has Logged in successfully 😊");
     } else {
       return res.send("Invalid credentials");
     }

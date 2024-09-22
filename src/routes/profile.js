@@ -20,13 +20,15 @@ router.get("/view", userAuth, async (req, res) => {
 router.patch("/edit", userAuth, async (req, res) => {
   try {
     if (!validateProfileEditData(req)) {
-      throw new Error("Edit not allowed");
+      return res
+        .status(400)
+        .json({ message: "error in saving provided data", data: req.body });
     }
     const loggedInUser = req.user;
 
     Object.keys(req.body).forEach((key) => (loggedInUser[key] = req.body[key]));
 
-    loggedInUser.save();
+    await loggedInUser.save();
     res.json({ message: "success", data: loggedInUser });
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);
@@ -46,7 +48,7 @@ router.patch("/change/password", userAuth, async (req, res) => {
 
     const passwordHash = await bcrypt.hash(newPassword, 10);
     user.password = passwordHash;
-    user.save();
+    await user.save();
 
     res
       .cookie("token", null, {
@@ -67,9 +69,6 @@ router.post("/forget/password", (req, res) => {
   // change password
 });
 
-router.delete("/delete", userAuth, async (req, res) => {
-  // first will delete all the connections related to this id
-  // delete account
-});
+router.delete("/delete", userAuth, async (req, res) => {});
 
 module.exports = router;
